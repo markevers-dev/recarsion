@@ -1,35 +1,39 @@
 # 🚗 ReCarsion
 
-Dit project bevat een applicatie die in staat is om afbeeldingen van auto's te classificeren op basis van verschillende ML-modellen. De applicatie maakt gebruik van ML.NET voor machine learning en stelt gebruikers in staat om modellen te laden, toe te passen en te beheren met behulp van reflection.
+This project contains an application capable of classifying car images based on different ML models. The application uses ML.NET for machine learning and allows users to load, apply, and manage models through reflection.
 
-## Functies
+## 📝 Background of the Project
 
-- **Machine Learning Models**: De applicatie ondersteunt het laden van verschillende ML-modellen voor het classificeren van afbeeldingen. De modellen worden opgeslagen in een aparte map (``Models``) en kunnen op elk moment worden geüpdatet. Door het gebruik van reflection herkent de applicatie automatisch nieuwe modellen zonder dat er handmatige wijzigingen in de code nodig zijn.
-- **XAML UI (WPF)**:
-  - **Keuze van ML Model**: De applicatie biedt een dropdownmenu waarmee gebruikers het model kunnen kiezen dat ze willen gebruiken voor classificatie. Als er geen model beschikbaar is, wordt de gebruiker op een gebruiksvriendelijke manier geïnformeerd over het ontbreken van een model.
-  - **Selectie van Afbeeldingen**: De gebruikersinterface bevat een knop waarmee gebruikers afbeeldingen kunnen selecteren. Nadat de bestanden zijn geselecteerd, sorteert de applicatie de afbeeldingen op basis van hun geclassificeerde categorieën.
+This application was made as the third assignment for the I-NotS WIN 2025 P3 course at the HAN University of Applied Sciences. It received a final grade of **10,0**.
+
+## 🚀 Functions
+
+- **🔧 Machine Learning Models**: The application supports loading different ML models to classify images. The models are stored in a separate folder (``Models``) and can be updated at any time. Thanks to reflection, the application automatically detects new models without the need for manual code changes.
+- **🌐 XAML UI (WPF)**:
+  - **🎯 Choice of ML Model**: The application provides a dropdown menu that allows users to select the model they want to use for classification. If no model is available, the user will be informed in a user-friendly way about the absence of a model.
+  - **🖼️ Image Selection**: The user interface contains a button that allows users to select images. After the files are selected, the application sorts the images based on their classified categories.
  
-## Getrained Auto Modellen
+## 🚗 Trained Car Models
 
-De verschillende modellen zijn getraind op twee tot vijf van de volgende auto's:
+The different models have been trained on two to five of the following cars:
 - Audi Q3
 - Hyundai Creta
 - Mahindra Scorpio
 - Rolls Royce Phantom
 - Suzuki Swift
 
-Afhankelijk van het model kunnen de afbeeldingen in verschillende categorieën van deze auto's worden geclassificeerd.
+Depending on the model, images will be classified into different categories for these cars.
  
-## Technische Details
+## ⚙️ Technical Details
 
-- **MVVM**: De applicatie volgt het MVVM-patroon (Model-View-ViewModel) om een scheiding van verantwoordelijkheden te waarborgen en de code goed testbaar en onderhoudbaar te houden. Dit betekent dat er geen Code-Behind aanwezig is.
-- **Reflection**: Het project maakt gebruik van ``System.Reflection`` om dynamisch ML-modellen te laden, de beschikbare types te inspecteren en nieuwe modelinstantie aan te maken. Dit zorgt ervoor dat de applicatie flexibel is in het omgaan met verschillende ML-modellen zonder de code te hoeven aanpassen.
-- **Assemblies en Interfaces**: Alle ML-modellen implementeren dezelfde interface, zodat de applicatie consistent kan werken met verschillende modellen.
+- **💻 MVVM**: The application follows the MVVM (Model-View-ViewModel) pattern to ensure a separation of concerns, making the code easily testable and maintainable. This means there is no Code-Behind.
+- **🔍 Reflection**: The project uses ``System.Reflection`` to dynamically load ML models, inspect available types, and instantiate new model instances. This ensures the application can handle different ML models flexibly without modifying the code.
+- **🔗 Assemblies and Interfaces**: All ML models implement the same interface, allowing the application to work consistently with different models.
 
-## Gebruiksaanwijzing
+## 📖 How to Use
 
-1. Start de applicatie en gebruik de knop om afbeeldingen of mappen te selecteren.
+1. Launch the application and use the button to select images or folders.
 
-2. Kies het model dat je wilt gebruiken uit de dropdown.
+2. Choose the model you want to use from the dropdown.
 
-3. De applicatie sorteert de afbeeldingen automatisch op basis van hun classificatie door het geselecteerde model.
+3. The application will automatically sort the images based on their classification by the selected model.
