@@ -1,0 +1,2 @@
+[*.consumption.cs]
+dotnet_diagnostic.CS8618.severity = none
