@@ -7,31 +7,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="Microsoft.ML" Version="3.0.1" />
     <PackageReference Include="Microsoft.ML.Vision" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Win32" Version="2.0.1" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
   </ItemGroup>
-  <ItemGroup Label="CarModel_FourCars">
-    <None Include="CarModel_FourCars.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Label="CarModel_ThreeCars">
-    <None Include="CarModel_ThreeCars.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Label="CarModel_TwoCars">
-    <None Include="CarModel_TwoCars.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Label="CarModel_AllCars">
-    <None Include="CarModel_AllCars.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  <ItemGroup>
+    <ProjectReference Include="..\MLModelInterface\MLModelInterface.csproj" />
   </ItemGroup>
 </Project>
