@@ -4,7 +4,7 @@ This project contains an application capable of classifying car images based on 
 
 ## 📝 Background of the Project
 
-This application was made as the third assignment for the I-NotS WIN 2025 P3 course at the HAN University of Applied Sciences. It received a final grade of **10,0**.
+This application was made as the third assignment for the I-NotS WIN 2025 P3 course at the HAN University of Applied Sciences. It received a final grade of **UNGRADED**.
 
 ## 🚀 Functions
 
