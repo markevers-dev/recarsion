@@ -12,11 +12,12 @@ namespace ReCarsion.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private IMLModel _selectedModel;
+        private readonly string modelsDirectory = "Models";
+        private IMLModel? _selectedModel;
         public ObservableCollection<IMLModel> AvailableModels { get; set; } = [];
         public ObservableCollection<string> SelectedFiles { get; set; } = [];
         public ObservableCollection<PredictionResult> Predictions { get; set; } = [];
-        public IMLModel SelectedModel
+        public IMLModel? SelectedModel
         {
             get => _selectedModel;
             set { _selectedModel = value; OnPropertyChanged(); }
@@ -24,26 +25,26 @@ namespace ReCarsion.ViewModels
 
         public ICommand OpenFileCommand { get; }
         public ICommand LoadModelsCommand { get; }
-        public ICommand PredictCommand { get;  }
+        public ICommand PredictCommand { get; }
         public ICommand ShowPreviewCommand { get; }
 
-        private FileSystemWatcher _modelWatcher;
+        private FileSystemWatcher? _modelWatcher;
 
-        private int _predictionsLoaded;
+        private int _predictionsLoaded = 0;
         public int PredictionsLoaded
         {
             get => _predictionsLoaded;
             set { _predictionsLoaded = value; OnPropertyChanged(); }
         }
 
-        private bool _isPredicting;
+        private bool _isPredicting = false;
         public bool IsPredicting
         {
             get => _isPredicting;
             set { _isPredicting = value; OnPropertyChanged(); }
         }
 
-        private bool _isPreviewVisible;
+        private bool _isPreviewVisible = false;
         public bool IsPreviewVisible
         {
             get => _isPreviewVisible;
@@ -78,7 +79,16 @@ namespace ReCarsion.ViewModels
 
         private void InitializeFileWatcher()
         {
-            string modelsPath = Path.Combine(Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.FullName, "Models");
+            var baseDirectory = AppContext.BaseDirectory;
+            var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent;
+
+            if (parentDir == null)
+            {
+                Console.WriteLine("Could not determine the parent directory for models.");
+                return;
+            }
+
+            string modelsPath = Path.Combine(parentDir.FullName, modelsDirectory);
 
             if (!Directory.Exists(modelsPath))
             {
@@ -101,7 +111,22 @@ namespace ReCarsion.ViewModels
 
         private async Task OpenFileDialog()
         {
-            string initialDirectory = Path.Combine(Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.FullName, "CarPictures");
+            var baseDirectory = AppContext.BaseDirectory;
+            var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent;
+
+            if (parentDir == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Could not determine the parent directory for models.");
+                return;
+            }
+
+            string initialDirectory = Path.Combine(parentDir.FullName, "CarPictures");
+
+            if (!Directory.Exists(initialDirectory))
+            {
+                System.Diagnostics.Debug.WriteLine("Models directory does not exist.");
+                return;
+            }
 
             try
             {
@@ -128,7 +153,7 @@ namespace ReCarsion.ViewModels
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex);
-            } 
+            }
         }
 
         private SemaphoreSlim _loadModelsSemaphore = new(1, 1);
@@ -158,9 +183,16 @@ namespace ReCarsion.ViewModels
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"(Re)Loading models");
+                var baseDirectory = AppContext.BaseDirectory;
+                var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent;
 
-                string modelsPath = Path.Combine(Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.FullName, "Models");
+                if (parentDir == null)
+                {
+                    Console.WriteLine("Could not determine the parent directory for models.");
+                    return;
+                }
+
+                string modelsPath = Path.Combine(parentDir.FullName, modelsDirectory);
 
                 if (!Directory.Exists(modelsPath))
                 {
@@ -189,7 +221,12 @@ namespace ReCarsion.ViewModels
 
                         foreach (var type in modelTypes)
                         {
-                            var modelInstance = (IMLModel)Activator.CreateInstance(type);
+                            if (Activator.CreateInstance(type) is not IMLModel modelInstance)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Failed to instantiate model from type: {type.FullName}");
+                                continue;
+                            }
+
                             if (modelInstance != null && newModelNames.Add(modelInstance.Name))
                             {
                                 newModels.Add(modelInstance);
@@ -251,7 +288,7 @@ namespace ReCarsion.ViewModels
                             PredictedCategory = result
                         });
                         PredictionsLoaded++;
-                    }); 
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -271,9 +308,9 @@ namespace ReCarsion.ViewModels
             PredictionsLoaded = 0;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

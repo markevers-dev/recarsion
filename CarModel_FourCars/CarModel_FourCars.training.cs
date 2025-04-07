@@ -31,16 +31,16 @@ namespace CarModel_FourCars
             {
                 throw new Exception("fail to find subdirectories");
             }
-            
+
             foreach (DirectoryInfo directory in subDirectories)
             {
                 var imageList = directory.EnumerateFiles().Where(f => allowedImageExtensions.Contains(f.Extension.ToLower()));
                 if (imageList.Count() > 0)
                 {
-                    res.AddRange(imageList.Select(i => new ModelInput 
+                    res.AddRange(imageList.Select(i => new ModelInput
                     {
                         Label = directory.Name,
-                         ImageSource = File.ReadAllBytes(i.FullName),
+                        ImageSource = File.ReadAllBytes(i.FullName),
                     }));
                 }
             }
@@ -69,11 +69,11 @@ namespace CarModel_FourCars
         public static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"Label",inputColumnName:@"Label",addKeyValueAnnotationsAsText:false)      
-                                    .Append(mlContext.MulticlassClassification.Trainers.ImageClassification(labelColumnName:@"Label",scoreColumnName:@"Score",featureColumnName:@"ImageSource"))      
-                                    .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
+            var pipeline = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: @"Label", inputColumnName: @"Label", addKeyValueAnnotationsAsText: false)
+                                    .Append(mlContext.MulticlassClassification.Trainers.ImageClassification(labelColumnName: @"Label", scoreColumnName: @"Score", featureColumnName: @"ImageSource"))
+                                    .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName: @"PredictedLabel", inputColumnName: @"PredictedLabel"));
 
             return pipeline;
         }
     }
- }
+}

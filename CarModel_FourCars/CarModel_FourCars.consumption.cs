@@ -49,7 +49,9 @@ namespace CarModel_FourCars
 
         #endregion
 
-        private static string MLNetModelPath = Path.Combine(Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.Parent.FullName,"CarModel_FourCars" ,"CarModel_FourCars.mlnet");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        private static string MLNetModelPath = Path.Combine(Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.Parent.FullName, "CarModel_FourCars", "CarModel_FourCars.mlnet");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         public static readonly Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(() => CreatePredictEngine(), true);
 
