@@ -19,7 +19,7 @@ jobs:
         run: dotnet restore
 
       - name: Run Code Formatter
-        run: dotnet format --verify-no-changes
+        run: dotnet format --verify-no-changes --exclude '**/*.consumption.cs'
 
       - name: Run Code Analyzers (Linting)
         run: dotnet build --no-restore /warnaserror
