@@ -37,3 +37,9 @@ Depending on the model, images will be classified into different categories for 
 2. Choose the model you want to use from the dropdown.
 
 3. The application will automatically sort the images based on their classification by the selected model.
+
+## 📜 Copyright Information
+
+All source code © Mark Evers, 2025. All rights reserved.
+
+This project is for educational purposes only and is not intended for wide distribution or commercial use.
