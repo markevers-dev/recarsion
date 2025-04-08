@@ -11,7 +11,7 @@ This application was made as the third assignment for the I-NotS WIN 2025 P3 cou
 - **🔧 Machine Learning Models**: The application supports loading different ML models to classify images. The models are stored in a separate folder (``Models``) and can be updated at any time. Thanks to reflection, the application automatically detects new models without the need for manual code changes.
 - **🌐 XAML UI (WPF)**:
   - **🎯 Choice of ML Model**: The application provides a dropdown menu that allows users to select the model they want to use for classification. If no model is available, the user will be informed in a user-friendly way about the absence of a model.
-  - **🖼️ Image Selection**: The user interface contains a button that allows users to select images. After the files are selected, the application sorts the images based on their classified categories.
+  - **🖼️ Image Selection**: The user interface contains a button that allows users to select a folder. After the folder is selected, the application sorts the images inside the folder based on their classified categories.
  
 ## 🚗 Trained Car Models
 
@@ -32,7 +32,7 @@ Depending on the model, images will be classified into different categories for 
 
 ## 📖 How to Use
 
-1. Launch the application and use the button to select images or folders.
+1. Launch the application and use the button to select a folder containing images.
 
 2. Choose the model you want to use from the dropdown.
 
