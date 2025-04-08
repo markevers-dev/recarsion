@@ -72,7 +72,6 @@ namespace ReCarsion.ViewModels
         {
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                System.Diagnostics.Debug.WriteLine($"Opening the Image Preview! Or trying to, at least, using bool: {showPreview}");
                 IsPreviewVisible = showPreview;
             });
         }
@@ -80,7 +79,8 @@ namespace ReCarsion.ViewModels
         private void InitializeFileWatcher()
         {
             var baseDirectory = AppContext.BaseDirectory;
-            var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent;
+            var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent;
+            System.Diagnostics.Debug.WriteLine(parentDir);
 
             if (parentDir == null)
             {
@@ -112,7 +112,7 @@ namespace ReCarsion.ViewModels
         private async Task OpenFileDialog()
         {
             var baseDirectory = AppContext.BaseDirectory;
-            var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent;
+            var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent;
 
             if (parentDir == null)
             {
@@ -130,24 +130,29 @@ namespace ReCarsion.ViewModels
 
             try
             {
-                OpenFileDialog openFileDialog = new()
+                OpenFolderDialog openFolderDialog = new()
                 {
-                    Multiselect = true,
-                    Filter = "Image Files|*.jpg;*.png;*.bmp;*.jpeg",
-                    InitialDirectory = initialDirectory
+                    Title = "Select a folder containing images",
+                    InitialDirectory = initialDirectory,
+                    Multiselect = false
                 };
-                if (openFileDialog.ShowDialog() == true)
+
+                if (openFolderDialog.ShowDialog() == true)
                 {
+                    List<string> imageFiles = [.. Directory.GetFiles(openFolderDialog.FolderName, "*.*", SearchOption.TopDirectoryOnly)
+                                              .Where(f => f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                          f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                          f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                          f.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase))];
+
                     await Application.Current.Dispatcher.InvokeAsync(() =>
                     {
                         SelectedFiles.Clear();
-                        foreach (var file in openFileDialog.FileNames)
+                        foreach (var file in imageFiles)
                         {
-                            System.Diagnostics.Debug.WriteLine(file);
                             SelectedFiles.Add(file);
                         }
                     });
-
                 }
             }
             catch (Exception ex)
@@ -184,7 +189,7 @@ namespace ReCarsion.ViewModels
             try
             {
                 var baseDirectory = AppContext.BaseDirectory;
-                var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent;
+                var parentDir = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent;
 
                 if (parentDir == null)
                 {
