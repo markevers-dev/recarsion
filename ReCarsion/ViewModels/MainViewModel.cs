@@ -83,7 +83,7 @@ namespace ReCarsion.ViewModels
 
             if (parentDir == null)
             {
-                Console.WriteLine("Could not determine the parent directory for models.");
+                System.Diagnostics.Debug.WriteLine("Could not determine the parent directory for models.");
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace ReCarsion.ViewModels
 
             if (!Directory.Exists(modelsPath))
             {
-                Console.WriteLine("Models directory does not exist.");
+                System.Diagnostics.Debug.WriteLine("Models directory does not exist.");
                 return;
             }
 
@@ -192,7 +192,7 @@ namespace ReCarsion.ViewModels
 
                 if (parentDir == null)
                 {
-                    Console.WriteLine("Could not determine the parent directory for models.");
+                    System.Diagnostics.Debug.WriteLine("Could not determine the parent directory for models.");
                     return;
                 }
 
@@ -270,7 +270,7 @@ namespace ReCarsion.ViewModels
         {
             if (_selectedModel == null)
             {
-                Console.WriteLine("No model selected.");
+                System.Diagnostics.Debug.WriteLine("No model selected.");
                 return;
             }
 
@@ -282,6 +282,14 @@ namespace ReCarsion.ViewModels
             {
                 try
                 {
+                    if (_selectedModel == null)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error predicting for {file}: Model unavailable");
+                        IsPredicting = false;
+                        PredictionsLoaded = 0;
+                        return;
+                    }
+
                     string result = await Task.Run(() => _selectedModel.Predict(file));
 
                     await Application.Current.Dispatcher.InvokeAsync(() =>
@@ -299,7 +307,7 @@ namespace ReCarsion.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error predicting for {file}: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Error predicting for {file}: {ex.Message}");
                 }
             }
 
