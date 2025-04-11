@@ -4,5 +4,6 @@
     {
         string Name { get; }
         string Predict(string imagePath);
+        List<string> GetLabels();
     }
 }

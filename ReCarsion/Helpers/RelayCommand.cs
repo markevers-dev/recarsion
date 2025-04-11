@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace ReCarsion
+namespace ReCarsion.Helpers
 {
     public class RelayCommand : ICommand
     {

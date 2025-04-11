@@ -1,4 +1,6 @@
-﻿using MLModelInterface;
+﻿using Microsoft.ML;
+using Microsoft.ML.Data;
+using MLModelInterface;
 
 namespace CarModel_AllCars
 {
@@ -12,11 +14,28 @@ namespace CarModel_AllCars
                 return "Invalid file path.";
 
             byte[] imageBytes = File.ReadAllBytes(imagePath);
-            var input = new CarModel_AllCars.ModelInput { ImageSource = imageBytes };
+            CarModel_AllCars.ModelInput input = new() { ImageSource = imageBytes };
 
-            var predictionResult = CarModel_AllCars.PredictAllLabels(input);
+            IOrderedEnumerable<KeyValuePair<string, float>> predictionResult = CarModel_AllCars.PredictAllLabels(input);
 
             return predictionResult.FirstOrDefault().Key;
+        }
+
+        public List<string> GetLabels()
+        {
+            DataViewSchema schema = CarModel_AllCars.PredictEngine.Value.OutputSchema;
+
+            VBuffer<ReadOnlyMemory<char>> labelBuffer = new();
+
+            DataViewSchema.Column? labelColumn = schema.GetColumnOrNull("Label");
+            if (labelColumn == null)
+                return [];
+
+            labelColumn.Value.GetKeyValues(ref labelBuffer);
+
+            List<string> _categoryLabels = [.. labelBuffer.DenseValues().Select(x => x.ToString())];
+
+            return _categoryLabels;
         }
     }
 }

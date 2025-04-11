@@ -1,16 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.Windows.Input;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.IO;
 using System.Reflection;
 using MLModelInterface;
 using System.Windows;
+using ReCarsion.Helpers;
 
 namespace ReCarsion.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BindableBase
     {
         private readonly string modelsDirectory = "Models";
         private IMLModel? _selectedModel;
@@ -20,7 +19,7 @@ namespace ReCarsion.ViewModels
         public IMLModel? SelectedModel
         {
             get => _selectedModel;
-            set { _selectedModel = value; OnPropertyChanged(); }
+            set => SetProperty(ref _selectedModel, value);
         }
 
         public ICommand OpenFileCommand { get; }
@@ -34,21 +33,21 @@ namespace ReCarsion.ViewModels
         public int PredictionsLoaded
         {
             get => _predictionsLoaded;
-            set { _predictionsLoaded = value; OnPropertyChanged(); }
+            set => SetProperty(ref _predictionsLoaded, value);
         }
 
         private bool _isPredicting = false;
         public bool IsPredicting
         {
             get => _isPredicting;
-            set { _isPredicting = value; OnPropertyChanged(); }
+            set => SetProperty(ref _isPredicting, value);
         }
 
         private bool _isPreviewVisible = false;
         public bool IsPreviewVisible
         {
             get => _isPreviewVisible;
-            set { _isPreviewVisible = value; OnPropertyChanged(); }
+            set => SetProperty(ref _isPreviewVisible, value);
         }
 
         public MainViewModel()
@@ -287,37 +286,25 @@ namespace ReCarsion.ViewModels
 
                     await Application.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Predictions.Add(new PredictionResult
-                        {
-                            ImagePath = file,
-                            PredictedCategory = result
-                        });
+                        if (Predictions.FirstOrDefault(x => x.Label == result) != null)
+                            Predictions.FirstOrDefault(x => x.Label == result)?.AssociatedImagePaths.Add(file);
+                        else
+                            Predictions.Add(new PredictionResult
+                            {
+                                Label = result,
+                                AssociatedImagePaths = [file]
+                            });
                         PredictionsLoaded++;
                     });
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error predicting for {file}: {ex.Message}");
-                    await Application.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        Predictions.Add(new PredictionResult
-                        {
-                            ImagePath = file,
-                            PredictedCategory = "Prediction failed"
-                        });
-                    });
                 }
             }
 
             IsPredicting = false;
             PredictionsLoaded = 0;
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

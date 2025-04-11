@@ -1,4 +1,6 @@
-﻿using MLModelInterface;
+﻿using Microsoft.ML.Data;
+using Microsoft.ML;
+using MLModelInterface;
 
 namespace CarModel_TwoCars
 {
@@ -17,6 +19,23 @@ namespace CarModel_TwoCars
             var predictionResult = CarModel_TwoCars.PredictAllLabels(input);
 
             return predictionResult.FirstOrDefault().Key;
+        }
+
+        public List<string> GetLabels()
+        {
+            DataViewSchema schema = CarModel_TwoCars.PredictEngine.Value.OutputSchema;
+
+            VBuffer<ReadOnlyMemory<char>> labelBuffer = new();
+
+            DataViewSchema.Column? labelColumn = schema.GetColumnOrNull("Label");
+            if (labelColumn == null)
+                return [];
+
+            labelColumn.Value.GetKeyValues(ref labelBuffer);
+
+            List<string> _categoryLabels = [.. labelBuffer.DenseValues().Select(x => x.ToString())];
+
+            return _categoryLabels;
         }
     }
 }

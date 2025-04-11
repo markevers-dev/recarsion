@@ -1,8 +1,10 @@
-﻿namespace ReCarsion
+﻿using System.Collections.ObjectModel;
+
+namespace ReCarsion
 {
     public class PredictionResult
     {
-        public required string ImagePath { get; set; }
-        public required string PredictedCategory { get; set; }
+        public required string Label { get; set; }
+        public required ObservableCollection<string> AssociatedImagePaths { get; set; }
     }
 }
